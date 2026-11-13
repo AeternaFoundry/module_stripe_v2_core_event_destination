@@ -43,5 +43,21 @@ EOT
       url = string
     })))
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.v2_core_event_destinations : (
+        contains(["snapshot", "thin"], v.event_payload)
+      )
+    ])
+    error_message = "must be one of: \"snapshot\", \"thin\""
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.v2_core_event_destinations : (
+        contains(["amazon_eventbridge", "azure_event_grid", "webhook_endpoint"], v.type)
+      )
+    ])
+    error_message = "must be one of: \"amazon_eventbridge\", \"azure_event_grid\", \"webhook_endpoint\""
+  }
 }
 
